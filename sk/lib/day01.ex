@@ -1,81 +1,56 @@
 defmodule Day01 do
-  def run1 do
-    lines = Input.load("./input/day01.txt")
-    solve(lines, &Day01.scan_simple/1, &Day01.parse_simple/1)
+  def run1, do: solve(fn x -> x end)
+  def run2, do: solve(&prepare/1)
+
+  def solve(prepare) do
+    "./input/day01.txt"
+    |> Input.load()
+    |> solve(prepare)
   end
 
-  def run2 do
-    lines = Input.load("./input/day01.txt")
-    solve(lines, &Day01.scan_extended/1, &Day01.parse_extended/1)
+  def solve(lines, prepare) do
+    lines
+    |> Enum.map(&prepare.(&1))
+    |> Enum.map(&calibration_value(&1))
+    |> Enum.sum()
   end
 
-  def solve(lines, scan, parse) do
-    Enum.sum(
-      Enum.map(lines, fn line ->
-        Day01.calibration_value(line, scan, parse)
-      end)
-    )
+  def calibration_value(line) do
+    chars = String.split(line, "")
+    first = chars |> Enum.find_value(&digit(&1))
+    last = chars |> Enum.reverse() |> Enum.find_value(&digit(&1))
+
+    first * 10 + last
   end
 
-  def calibration_value(line, scan, parse) do
-    results = Enum.map(scan.(line), fn result -> List.first(result) end)
-    {a, _} = parse.(List.first(results))
-    {b, _} = parse.(List.last(results))
+  def digit(x) do
+    maybe_int = Integer.parse(x)
 
-    a * 10 + b
-  end
-
-  def scan_simple(line) do
-    Regex.scan(~r/\d/, line)
-  end
-
-  def parse_simple(x) do
-    Integer.parse(x)
-  end
-
-  def scan_extended(line) do
-    scan_extended(line, [])
-  end
-
-  def scan_extended(line, acc) do
-    xs = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-
-    case line do
-      "" ->
-        Enum.reverse(acc)
-
-      content ->
-        head = String.first(content)
-        tail = String.slice(content, 1..-1)
-
-        case Integer.parse(head) do
-          {value, _} ->
-            scan_extended(tail, [[head]] ++ acc)
-
-          _ ->
-            case Enum.find(xs, fn x -> String.starts_with?(line, x) end) do
-              nil ->
-                scan_extended(tail, acc)
-
-              finding ->
-                scan_extended(tail, [[finding]] ++ acc)
-            end
-        end
+    if maybe_int != :error do
+      {value, _} = maybe_int
+      value
     end
   end
 
-  def parse_extended(x) do
-    case x do
-      "one" -> {1, ~c""}
-      "two" -> {2, ~c""}
-      "three" -> {3, ~c""}
-      "four" -> {4, ~c""}
-      "five" -> {5, ~c""}
-      "six" -> {6, ~c""}
-      "seven" -> {7, ~c""}
-      "eight" -> {8, ~c""}
-      "nine" -> {9, ~c""}
-      y -> Integer.parse(y)
-    end
-  end
+  def prepare(text), do: prepare(text, "")
+  def prepare("", acc), do: String.reverse(acc)
+  def prepare("one" <> rest, acc), do: prepare("ne" <> rest, "1" <> acc)
+  def prepare("two" <> rest, acc), do: prepare("wo" <> rest, "2" <> acc)
+  def prepare("three" <> rest, acc), do: prepare("hree" <> rest, "3" <> acc)
+  def prepare("four" <> rest, acc), do: prepare("our" <> rest, "4" <> acc)
+  def prepare("five" <> rest, acc), do: prepare("ive" <> rest, "5" <> acc)
+  def prepare("six" <> rest, acc), do: prepare("ix" <> rest, "6" <> acc)
+  def prepare("seven" <> rest, acc), do: prepare("even" <> rest, "7" <> acc)
+  def prepare("eight" <> rest, acc), do: prepare("ight" <> rest, "8" <> acc)
+  def prepare("nine" <> rest, acc), do: prepare("ine" <> rest, "9" <> acc)
+  def prepare("1" <> rest, acc), do: prepare(rest, "1" <> acc)
+  def prepare("2" <> rest, acc), do: prepare(rest, "2" <> acc)
+  def prepare("3" <> rest, acc), do: prepare(rest, "3" <> acc)
+  def prepare("4" <> rest, acc), do: prepare(rest, "4" <> acc)
+  def prepare("5" <> rest, acc), do: prepare(rest, "5" <> acc)
+  def prepare("6" <> rest, acc), do: prepare(rest, "6" <> acc)
+  def prepare("7" <> rest, acc), do: prepare(rest, "7" <> acc)
+  def prepare("8" <> rest, acc), do: prepare(rest, "8" <> acc)
+  def prepare("9" <> rest, acc), do: prepare(rest, "9" <> acc)
+  def prepare(other, acc), do: prepare(String.slice(other, 1..-1), acc)
 end
