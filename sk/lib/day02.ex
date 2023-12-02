@@ -3,21 +3,21 @@ defmodule Cubes do
 
   def from_raw_str(str), do: List.foldl(str, %Cubes{}, &add/2)
 
-  def add({v, :red}, cubes), do: %{cubes | red: cubes.red + v}
-  def add({v, :green}, cubes), do: %{cubes | green: cubes.green + v}
-  def add({v, :blue}, cubes), do: %{cubes | blue: cubes.blue + v}
+  defp add({v, :red}, cubes), do: %{cubes | red: cubes.red + v}
+  defp add({v, :green}, cubes), do: %{cubes | green: cubes.green + v}
+  defp add({v, :blue}, cubes), do: %{cubes | blue: cubes.blue + v}
 
-  def is_possible?(cubes, max_cubes) do
+  defp is_possible?(cubes, max_cubes) do
     cubes.red <= max_cubes.red and cubes.green <= max_cubes.green and cubes.blue <= max_cubes.blue
   end
 
   def are_possible?(cubess, max_cubes),
-    do: Enum.all?(cubess, fn cubes -> is_possible?(cubes, max_cubes) end)
+    do: Enum.all?(cubess, &is_possible?(&1, max_cubes))
 
-  def min_needed(cubess), do: min_needed(cubess, %Cubes{})
-  def min_needed([], acc), do: acc
+  defp min_needed(cubess), do: min_needed(cubess, %Cubes{})
+  defp min_needed([], acc), do: acc
 
-  def min_needed([head | tail], acc) do
+  defp min_needed([head | tail], acc) do
     min_needed(tail, %Cubes{
       red: Enum.max([head.red, acc.red]),
       green: Enum.max([head.green, acc.green]),
@@ -72,8 +72,7 @@ defmodule Day02 do
       Regex.scan(~r/(\d+ (blue|red|green))/, raw_result)
       |> Enum.map(fn results ->
         [val, color] = results |> List.first() |> String.split(" ")
-        {int, _} = Integer.parse(val)
-        {int, parse_color(color)}
+        {String.to_integer(val), parse_color(color)}
       end)
       |> Cubes.from_raw_str()
     end)
