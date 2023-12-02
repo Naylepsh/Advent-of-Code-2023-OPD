@@ -41,4 +41,17 @@ defmodule Day02Test do
 
     assert Day02.solve(input) == expected
   end
+
+  test "set power" do
+    data = [
+      {
+        [%Cubes{red: 4, blue: 3}, %Cubes{red: 1, green: 2, blue: 6}, %Cubes{green: 2}],
+        48
+      }
+    ]
+
+    Enum.each(data, fn {input, expected} ->
+      assert Cubes.power(input) == expected
+    end)
+  end
 end
