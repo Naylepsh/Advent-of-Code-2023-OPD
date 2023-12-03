@@ -2,16 +2,6 @@ defmodule Day03Test do
   use ExUnit.Case
   doctest Day03
 
-  test "get columns of symbols" do
-    data = [
-      {"...*......", [3]}
-    ]
-
-    Enum.each(data, fn {input, expected} ->
-      assert Day03.get_symbol_columns(input) == expected
-    end)
-  end
-
   test "get coords of symbols" do
     data = [
       {
@@ -28,12 +18,12 @@ defmodule Day03Test do
           ".664.598.."
         ],
         [
-          {1, 3},
-          {3, 6},
-          {4, 3},
-          {5, 5},
-          {8, 3},
-          {8, 5}
+          {"*", 1, 3},
+          {"#", 3, 6},
+          {"*", 4, 3},
+          {"+", 5, 5},
+          {"$", 8, 3},
+          {"*", 8, 5}
         ]
       }
     ]
@@ -97,7 +87,7 @@ defmodule Day03Test do
         # *42..
         # .....
         {42, {1, 1}, {1, 2}},
-        [{1, 0}],
+        [{"*", 1, 0}],
         true
       },
       {
@@ -105,7 +95,7 @@ defmodule Day03Test do
         # .42*.
         # .....
         {42, {1, 1}, {1, 2}},
-        [{1, 3}],
+        [{"*", 1, 3}],
         true
       },
       {
@@ -113,7 +103,7 @@ defmodule Day03Test do
         # .42..
         # .....
         {42, {1, 1}, {1, 2}},
-        [{0, 1}],
+        [{"*", 0, 1}],
         true
       },
       {
@@ -121,7 +111,7 @@ defmodule Day03Test do
         # .42..
         # .....
         {42, {1, 1}, {1, 2}},
-        [{0, 0}],
+        [{"*", 0, 0}],
         true
       },
       {
@@ -129,15 +119,15 @@ defmodule Day03Test do
         # .42..
         # ....*
         {42, {1, 1}, {1, 2}},
-        [{2, 4}],
+        [{"*", 2, 4}],
         false
       },
       {
         # .....
         # .42..
-        # *...*
+        # +...*
         {42, {1, 1}, {1, 2}},
-        [{2, 4}, {2, 0}],
+        [{"*", 2, 4}, {"+", 2, 0}],
         true
       }
     ]

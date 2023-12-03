@@ -15,7 +15,7 @@ defmodule Day03 do
     |> Enum.sum()
   end
 
-  def get_symbol_columns(line) do
+  defp get_symbol_columns(line) do
     line
     # This will add "" at both start and end of char array
     |> String.split("")
@@ -24,7 +24,7 @@ defmodule Day03 do
       Enum.member?(["$", "#", "*", "+", "-", "@", "=", "%", "/", "&"], char)
     end)
     # Handle the offset caused by additional empty chars
-    |> Enum.map(fn {_, idx} -> idx - 1 end)
+    |> Enum.map(fn {char, idx} -> {char, idx - 1} end)
   end
 
   def get_symbol_coords(lines) do
@@ -33,7 +33,7 @@ defmodule Day03 do
     |> Enum.flat_map(fn {line, row} ->
       line
       |> get_symbol_columns()
-      |> Enum.map(fn column -> {row, column} end)
+      |> Enum.map(fn {char, column} -> {char, row, column} end)
     end)
   end
 
@@ -62,7 +62,7 @@ defmodule Day03 do
 
   def adjacent?(_, []), do: false
 
-  def adjacent?(number_coords, [{symbol_row, symbol_column} | tail]) do
+  def adjacent?(number_coords, [{_, symbol_row, symbol_column} | tail]) do
     {_, {row, start}, {_, end_pos}} = number_coords
 
     cond do
