@@ -72,7 +72,7 @@ defmodule Day03Test do
     end)
   end
 
-  test "adjacent?" do
+  test "adjacent? for number coords" do
     data = [
       {
         # .....
@@ -153,6 +153,25 @@ defmodule Day03Test do
 
     expected = 4361
 
-    assert Day03.solve(input) == expected
+    assert Day03.solve1(input) == expected
+  end
+
+  test "solve2" do
+    input = [
+      "467..114..",
+      "...*......",
+      "..35..633.",
+      "......#...",
+      "617*......",
+      ".....+.58.",
+      "..592.....",
+      "......755.",
+      "...$.*....",
+      ".664.598.."
+    ]
+
+    expected = 467_835
+
+    assert Day03.solve2(input) == expected
   end
 end

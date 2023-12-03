@@ -2,16 +2,31 @@ defmodule Day03 do
   def run1 do
     "./input/day03.txt"
     |> Input.load()
-    |> solve()
+    |> solve1()
   end
 
-  def solve(lines) do
+  def run2 do
+    "./input/day03.txt"
+    |> Input.load()
+    |> solve2()
+  end
+
+  def solve1(lines) do
     symbols_coords = get_symbol_coords(lines)
     numbers_coords = get_number_coords(lines)
 
     numbers_coords
     |> Enum.filter(fn number_coords -> adjacent?(number_coords, symbols_coords) end)
     |> Enum.map(fn {value, _, _} -> value end)
+    |> Enum.sum()
+  end
+
+  def solve2(lines) do
+    symbols_coords = get_symbol_coords(lines)
+    numbers_coords = get_number_coords(lines)
+
+    symbols_coords
+    |> Enum.map(fn symbol_coords -> gear_ratio(symbol_coords, numbers_coords) end)
     |> Enum.sum()
   end
 
@@ -76,4 +91,25 @@ defmodule Day03 do
         adjacent?(number_coords, tail)
     end
   end
+
+  def adjacent?(symbol_coords, number_coords) do
+    adjacent?(number_coords, [symbol_coords])
+  end
+
+  defp gear_ratio(_symbol_coords, []), do: 0
+
+  defp gear_ratio({"*", row, col}, numbers_coords) do
+    adjacent_parts =
+      Enum.filter(numbers_coords, fn number_coords ->
+        adjacent?({"*", row, col}, number_coords)
+      end)
+
+    if(length(adjacent_parts) == 2) do
+      adjacent_parts |> Enum.map(fn {value, {_, _}, {_, _}} -> value end) |> Enum.product()
+    else
+      0
+    end
+  end
+
+  defp gear_ratio(_symbol_coords, _numbers_coords), do: 0
 end
