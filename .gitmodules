@@ -1,3 +1,6 @@
 [submodule "mm"]
 	path = mm
 	url = https://github.com/Michal-Miko/aoc-2023
+[submodule "sk"]
+	path = sk
+	url = git@github.com:Naylepsh/advent-of-code.git
