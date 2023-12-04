@@ -3,7 +3,7 @@
 	url = https://github.com/Michal-Miko/aoc-2023
 [submodule "sk"]
 	path = sk
-	url = git@github.com:Naylepsh/advent-of-code.git
+	url = https://github.com/Naylepsh/advent-of-code
 [submodule "md"]
 	path = md
 	url = https://github.com/mateusz-dzitkowski/aoc23
