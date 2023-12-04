@@ -4,3 +4,6 @@
 [submodule "md"]
 	path = md
 	url = https://github.com/mateusz-dzitkowski/aoc23
+[submodule "sk"]
+	path = sk
+	url = git@github.com:Naylepsh/advent-of-code.git
