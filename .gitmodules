@@ -1,6 +1,6 @@
 [submodule "mm"]
 	path = mm
-	url = https://github.com/Michal-Miko/aoc-2023
+	url = git@github.com:Michal-Miko/aoc-2023.git
 [submodule "md"]
 	path = md
 	url = https://github.com/mateusz-dzitkowski/aoc23
